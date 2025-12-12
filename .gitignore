@@ -86,6 +86,11 @@ htmlcov/
 .tox/
 .hypothesis/
 
+# AWS CDK
+cdk.out/
+*.egg-info/
+cdk/.venv/
+
 # Jupyter Notebook
 .ipynb_checkpoints
 

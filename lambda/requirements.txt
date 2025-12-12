@@ -1,0 +1,2 @@
+# No external dependencies required for Lambda runtime
+# Lambda function uses only Python standard library
