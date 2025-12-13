@@ -69,6 +69,8 @@ logs/
 Thumbs.db
 .Spotlight-V100
 .Trashes
+.DS_Store
+*.DS_Store
 
 # Azure CLI
 .azure/
@@ -103,9 +105,8 @@ dmypy.json
 *.tmp
 *.bak
 *.orig
-SECURITY.md
-.kiro/
-test_*.sh
-AGENTS.md
-DEPLOYMENT_STATUS.md
-TROUBLESHOOTING_SUMMARY.md
+/test_*.sh
+/SECURITY.md
+/AGENTS.md
+/DEPLOYMENT_STATUS.md
+/TROUBLESHOOTING_SUMMARY.md
