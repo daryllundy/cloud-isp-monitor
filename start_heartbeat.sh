@@ -22,7 +22,7 @@ INTERVAL="${HEARTBEAT_INTERVAL:-60}"  # seconds
 # Validate required configuration
 if [ -z "$HEARTBEAT_URL" ]; then
     echo "Error: HEARTBEAT_URL not set. Please set it in .env file or environment variable."
-    echo "Example: HEARTBEAT_URL=https://your-func.azurewebsites.net/api/ping"
+    echo "Example: HEARTBEAT_URL=https://<id>.lambda-url.<region>.on.aws/"
     exit 1
 fi
 

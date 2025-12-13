@@ -1,6 +1,29 @@
-# Azure ISP Monitor
+# ISP Monitor
 
-A simple ISP/internet connectivity monitoring system using Azure Functions and Azure Monitor alerts. This system sends email alerts when your internet connection goes down by detecting missing heartbeat pings.
+A simple ISP/internet connectivity monitoring system using Azure Functions or AWS Lambda. This system sends email alerts when your internet connection goes down by detecting missing heartbeat pings.
+
+## Cloud Platform Options
+
+This project supports deployment to both Azure and AWS:
+
+- **Azure** (original implementation) - See instructions below
+- **AWS** (new implementation) - See [README_AWS.md](README_AWS.md)
+
+Both implementations provide the same functionality with equivalent costs (~$0-10/month). Choose based on your cloud preference or existing infrastructure.
+
+### Key Differences
+
+| Feature | Azure | AWS |
+|---------|-------|-----|
+| **Serverless Function** | Azure Functions | AWS Lambda |
+| **Logging** | Application Insights | CloudWatch Logs |
+| **Monitoring** | Azure Monitor Alerts | CloudWatch Alarms |
+| **Notifications** | Action Groups | SNS Topics |
+| **Infrastructure as Code** | Bicep | AWS CDK (Python) |
+| **Authentication** | Managed Identity | IAM Roles |
+| **Estimated Cost** | $2-10/month | $0-0.50/month |
+
+See [README_AWS.md](README_AWS.md) for AWS deployment instructions and [docs/MIGRATION_GUIDE.md](docs/MIGRATION_GUIDE.md) for migration steps.
 
 ## Architecture
 
@@ -107,7 +130,7 @@ python3 heartbeat_agent.py \
   --verbose
 ```
 
-See [AGENT_README.md](AGENT_README.md) for detailed agent documentation.
+See [docs/AGENT_README.md](docs/AGENT_README.md) for detailed agent documentation.
 
 ### 3. Test the System
 
@@ -468,11 +491,34 @@ If values don't match, re-run `./deploy.sh` to apply the correct configuration.
 - **Python on Windows** is deprecated; use Linux Consumption plan
 - **Auth Level** is set to `anonymous` for easy testing; consider changing to `function` for production
 
+## Documentation
+
+### Platform-Specific Guides
+- [README_AWS.md](README_AWS.md) - AWS deployment guide
+- [docs/MIGRATION_GUIDE.md](docs/MIGRATION_GUIDE.md) - Azure to AWS migration steps
+- [docs/PLATFORM_COMPARISON.md](docs/PLATFORM_COMPARISON.md) - Detailed Azure vs AWS comparison
+
+### Agent Documentation
+- [docs/AGENT_README.md](docs/AGENT_README.md) - Heartbeat agent documentation
+
+### Operations
+- [docs/SCRIPTS.md](docs/SCRIPTS.md) - All helper scripts documentation
+- [docs/ALERT_TROUBLESHOOTING.md](docs/ALERT_TROUBLESHOOTING.md) - Alert debugging guide
+- [docs/SECURITY_REVIEW.md](docs/SECURITY_REVIEW.md) - AWS security analysis
+- [docs/SECURITY.md](docs/SECURITY.md) - Azure security documentation
+
+### Testing
+- [tests/README.md](tests/README.md) - Testing documentation
+- [tests/ALARM_TEST_SUMMARY.md](tests/ALARM_TEST_SUMMARY.md) - Alarm test results
+
 ## Resources
 
 - [Azure Functions Python Developer Guide](https://docs.microsoft.com/azure/azure-functions/functions-reference-python)
 - [Azure Monitor Alert Rules](https://docs.microsoft.com/azure/azure-monitor/alerts/alerts-overview)
 - [Bicep Documentation](https://docs.microsoft.com/azure/azure-resource-manager/bicep/)
+- [AWS Lambda Python Guide](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python.html)
+- [AWS CDK Documentation](https://docs.aws.amazon.com/cdk/v2/guide/home.html)
+- [CloudWatch Alarms](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html)
 
 ## License
 

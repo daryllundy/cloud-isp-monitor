@@ -2,7 +2,7 @@
 """
 ISP Monitor Heartbeat Agent
 
-This script sends periodic heartbeat pings to the Azure Function to monitor
+This script sends periodic heartbeat pings to the Serverless Function (Azure/AWS) to monitor
 internet connectivity. Run this on a device that should be monitored.
 
 Usage:
@@ -18,10 +18,10 @@ Options:
 
 Examples:
     # Send one ping
-    python3 heartbeat_agent.py --url https://your-func.azurewebsites.net/api/ping --device dl-home --once
+    python3 heartbeat_agent.py --url https://your-func-url/ --device dl-home --once
 
     # Run continuously every 60 seconds
-    python3 heartbeat_agent.py --url https://your-func.azurewebsites.net/api/ping --device dl-home
+    python3 heartbeat_agent.py --url https://your-func-url/ --device dl-home
 
     # Run as daemon with custom interval
     python3 heartbeat_agent.py --interval 120 --daemon --verbose
@@ -51,7 +51,7 @@ def get_endpoint_url():
 
 def send_ping(url, device_name, note='', verbose=False):
     """
-    Send a heartbeat ping to the Azure Function.
+    Send a heartbeat ping to the Function endpoint.
 
     Args:
         url: Function endpoint URL
@@ -151,7 +151,7 @@ def run_daemon(url, device_name, interval, verbose=False):
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description='Send heartbeat pings to Azure ISP Monitor function',
+        description='Send heartbeat pings to ISP Monitor function',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__
     )
