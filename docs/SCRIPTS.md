@@ -4,6 +4,68 @@ This document describes all helper scripts in the project and their usage.
 
 ## Deployment Scripts
 
+### `deploy_cloud.sh` (Unified Multi-Cloud)
+
+Unified deployment script that can deploy to Azure, AWS, or both clouds using a single command.
+
+**Usage:**
+```bash
+./deploy_cloud.sh --cloud=<target> [OPTIONS]
+```
+
+**Cloud Targets:**
+- `--cloud=azure` - Deploy to Azure only
+- `--cloud=aws` - Deploy to AWS only
+- `--cloud=both` - Deploy to both clouds (sequential)
+
+**Options:**
+- `--check` - Validate prerequisites without deploying
+- `--help` - Show usage information
+
+**Examples:**
+```bash
+# Deploy to Azure
+./deploy_cloud.sh --cloud=azure
+
+# Deploy to AWS
+./deploy_cloud.sh --cloud=aws
+
+# Deploy to both clouds
+./deploy_cloud.sh --cloud=both
+
+# Check Azure prerequisites
+./deploy_cloud.sh --cloud=azure --check
+```
+
+**Prerequisites:**
+- **For Azure**: Azure CLI (`az`), `jq`, `zip`
+- **For AWS**: AWS CLI, Node.js, npm, Python 3.8+
+- `.env` file configured with cloud-specific variables
+
+**What it does:**
+1. Parses command-line arguments
+2. Validates prerequisites for target cloud(s)
+3. Checks authentication status (Azure/AWS)
+4. Validates environment variables from `.env`
+5. Displays deployment plan
+6. Executes cloud-specific deployment scripts
+7. Displays unified results and next steps
+
+**Environment Variables:**
+- **Common**: `ALERT_EMAIL`, `PREFIX`
+- **Azure**: `RG`, `LOCATION`
+- **AWS**: `AWS_REGION`, `LOG_RETENTION_DAYS`, `LAMBDA_MEMORY_MB`
+
+**Features:**
+- Color-coded output for better readability
+- Comprehensive prerequisite checking
+- Clear error messages with installation hints
+- Authentication validation before deployment
+- Sequential deployment for `--cloud=both` with individual success/failure tracking
+- Backward compatible (existing `deploy.sh` and `deploy_aws.sh` still work)
+
+---
+
 ### `deploy.sh` (Azure)
 
 Deploys the ISP Monitor infrastructure and function code to Azure.

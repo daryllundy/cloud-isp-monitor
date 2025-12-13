@@ -55,6 +55,28 @@ The AWS implementation uses serverless components to minimize costs and maintena
 
 ## Deployment
 
+### Option 1: Unified Multi-Cloud Deployment (Recommended)
+
+Use the unified deployment script that supports both Azure and AWS:
+
+```bash
+# Configure environment
+cp .env.example .env
+# Edit .env with AWS-specific settings (AWS_REGION, ALERT_EMAIL, PREFIX)
+
+# Deploy to AWS
+./deploy_cloud.sh --cloud=aws
+
+# Check prerequisites before deploying
+./deploy_cloud.sh --cloud=aws --check
+```
+
+See the main [README.md](README.md) for more details on the unified deployment approach.
+
+### Option 2: Traditional AWS Deployment
+
+Alternatively, use the AWS-specific deployment script directly:
+
 1.  **Clone the repository** (if not already done).
 
 2.  **Configuration**:

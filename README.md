@@ -80,7 +80,44 @@ ls -d /Applications/Python\ 3.*/Install\ Certificates.command
 - `[SSL: CERTIFICATE_VERIFY_FAILED]` error - Run the Install Certificates command above
 - `python3: command not found` - Install Python 3 from [python.org](https://www.python.org/downloads/) or via Homebrew
 
-## Quick Start
+## Unified Multi-Cloud Deployment
+
+Deploy to either Azure or AWS (or both) using a single unified script:
+
+```bash
+# Configure environment
+cp .env.example .env
+# Edit .env with your cloud-specific settings
+
+# Deploy to Azure only
+./deploy_cloud.sh --cloud=azure
+
+# Deploy to AWS only
+./deploy_cloud.sh --cloud=aws
+
+# Deploy to both clouds
+./deploy_cloud.sh --cloud=both
+
+# Check prerequisites without deploying
+./deploy_cloud.sh --cloud=azure --check
+```
+
+**Prerequisites:**
+- **For Azure**: Azure CLI, jq, zip
+- **For AWS**: AWS CLI, Node.js, npm, Python 3.8+
+- Configured `.env` file with cloud-specific variables (see `.env.example`)
+
+The unified script will:
+- ✅ Validate prerequisites and authentication
+- ✅ Check required environment variables
+- ✅ Execute cloud-specific deployment
+- ✅ Display results and next steps
+
+For more details, see the individual deployment methods below or run `./deploy_cloud.sh --help`.
+
+## Quick Start (Traditional Deployment)
+
+You can also use the cloud-specific deployment scripts directly:
 
 ### 1. Deploy Infrastructure
 
