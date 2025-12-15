@@ -85,10 +85,10 @@ class IspMonitorStack(Stack):
         )
 
         # 3.6 Create CloudWatch Alarm
-        # Trigger if sum of heartbeats < 1 in 5 minutes
+        # Trigger if sum of heartbeats < 1 in 3 minutes
         alarm = float_metric = metric_filter.metric(
             statistic="Sum",
-            period=Duration.minutes(5)
+            period=Duration.minutes(3)
         ).create_alarm(
             self, "HeartbeatAlarm",
             alarm_description="Alarm if ISP Monitor heartbeat is missing",
