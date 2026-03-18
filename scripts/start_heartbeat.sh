@@ -7,11 +7,13 @@
 #
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 SESSION_NAME="isp-monitor"
 
 # Load configuration from .env file
-if [ -f "$SCRIPT_DIR/.env" ]; then
-    source "$SCRIPT_DIR/.env"
+if [ -f "$REPO_ROOT/.env" ]; then
+    # shellcheck disable=SC1091
+    source "$REPO_ROOT/.env"
 fi
 
 # Configuration (can be overridden by .env)
@@ -45,7 +47,7 @@ echo "  Interval: $INTERVAL seconds"
 echo ""
 
 tmux new-session -d -s "$SESSION_NAME" \
-    "cd '$SCRIPT_DIR' && python3 heartbeat_agent.py --url '$HEARTBEAT_URL' --device '$DEVICE_NAME' --interval $INTERVAL --daemon --verbose"
+    "cd '$REPO_ROOT' && python3 heartbeat_agent.py --url '$HEARTBEAT_URL' --device '$DEVICE_NAME' --interval $INTERVAL --daemon --verbose"
 
 if [ $? -eq 0 ]; then
     echo "✓ Heartbeat agent started successfully!"

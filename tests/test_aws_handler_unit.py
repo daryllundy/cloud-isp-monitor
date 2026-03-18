@@ -8,7 +8,8 @@ across a wide range of inputs.
 import json
 import re
 from hypothesis import given, strategies as st, settings
-from handler import sanitize_string, validate_ip
+from aws_handler import lambda_handler
+from isp_monitor_core import sanitize_string, validate_ip
 
 
 # Feature: aws-migration, Property 1: Device name sanitization and length constraint
@@ -122,7 +123,6 @@ def test_property_structured_logging(device, note, ip):
     """
     import sys
     from io import StringIO
-    from handler import lambda_handler
     
     # Create a valid Lambda Function URL event
     event = {
@@ -192,7 +192,6 @@ def test_property_response_format(device, note, method):
     """
     import sys
     from io import StringIO
-    from handler import lambda_handler
     
     # Create a valid Lambda Function URL event
     event = {
@@ -241,7 +240,6 @@ def test_get_method():
     """Test that GET method is accepted."""
     import sys
     from io import StringIO
-    from handler import lambda_handler
     
     event = {
         "version": "2.0",
@@ -268,7 +266,6 @@ def test_post_method():
     """Test that POST method is accepted."""
     import sys
     from io import StringIO
-    from handler import lambda_handler
     
     event = {
         "version": "2.0",
@@ -298,7 +295,6 @@ def test_empty_inputs_use_defaults():
     """Test that empty/missing inputs use default values."""
     import sys
     from io import StringIO
-    from handler import lambda_handler
     
     event = {
         "version": "2.0",
@@ -326,7 +322,6 @@ def test_oversized_inputs_truncated():
     """Test that oversized inputs are truncated to max length."""
     import sys
     from io import StringIO
-    from handler import lambda_handler
     
     # Create oversized inputs
     long_device = "x" * 200  # 200 chars, should be truncated to 100
@@ -363,7 +358,6 @@ def test_invalid_json_handled_gracefully():
     """Test that invalid JSON body is handled gracefully."""
     import sys
     from io import StringIO
-    from handler import lambda_handler
     
     event = {
         "version": "2.0",
