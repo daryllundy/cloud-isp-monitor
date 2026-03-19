@@ -6,17 +6,17 @@ This document describes all helper scripts in the project and their usage.
 
 ### `deploy_cloud.sh` (Unified Multi-Cloud)
 
-Unified deployment script that can deploy to Azure, AWS, or both clouds using a single command.
+Canonical deployment entry point for Azure, AWS, or both clouds.
 
 **Usage:**
 ```bash
-./deploy_cloud.sh --cloud=<target> [OPTIONS]
+./deploy_cloud.sh --provider=<target> [OPTIONS]
 ```
 
-**Cloud Targets:**
-- `--cloud=azure` - Deploy to Azure only
-- `--cloud=aws` - Deploy to AWS only
-- `--cloud=both` - Deploy to both clouds (sequential)
+**Provider Targets:**
+- `--provider=azure` - Deploy to Azure only
+- `--provider=aws` - Deploy to AWS only
+- `--provider=both` - Deploy to both clouds (sequential)
 
 **Options:**
 - `--check` - Validate prerequisites without deploying
@@ -25,16 +25,16 @@ Unified deployment script that can deploy to Azure, AWS, or both clouds using a 
 **Examples:**
 ```bash
 # Deploy to Azure
-./deploy_cloud.sh --cloud=azure
+./deploy_cloud.sh --provider=azure
 
 # Deploy to AWS
-./deploy_cloud.sh --cloud=aws
+./deploy_cloud.sh --provider=aws
 
 # Deploy to both clouds
-./deploy_cloud.sh --cloud=both
+./deploy_cloud.sh --provider=both
 
 # Check Azure prerequisites
-./deploy_cloud.sh --cloud=azure --check
+./deploy_cloud.sh --provider=azure --check
 ```
 
 **Prerequisites:**
@@ -44,11 +44,11 @@ Unified deployment script that can deploy to Azure, AWS, or both clouds using a 
 
 **What it does:**
 1. Parses command-line arguments
-2. Validates prerequisites for target cloud(s)
+2. Validates prerequisites for target provider(s)
 3. Checks authentication status (Azure/AWS)
 4. Validates environment variables from `.env`
 5. Displays deployment plan
-6. Executes cloud-specific deployment scripts
+6. Executes provider-specific deployment logic
 7. Displays unified results and next steps
 
 **Environment Variables:**
@@ -61,74 +61,38 @@ Unified deployment script that can deploy to Azure, AWS, or both clouds using a 
 - Comprehensive prerequisite checking
 - Clear error messages with installation hints
 - Authentication validation before deployment
-- Sequential deployment for `--cloud=both` with individual success/failure tracking
-- Backward compatible (existing `deploy.sh` and `deploy_aws.sh` still work)
+- Sequential deployment for `--provider=both`
+- Thin compatibility wrappers for `deploy.sh` and `deploy_aws.sh`
 
 ---
 
-### `deploy.sh` (Azure)
+### `deploy.sh` (Azure Wrapper)
 
-Deploys the ISP Monitor infrastructure and function code to Azure.
+Compatibility wrapper that forwards to `deploy_cloud.sh --provider=azure`.
 
 **Usage:**
 ```bash
-./deploy.sh
+./deploy.sh [OPTIONS]
 ```
 
-**Prerequisites:**
-- Azure CLI installed and authenticated (`az login`)
-- `.env` file configured with required variables
-- `jq` installed for JSON parsing
-
 **What it does:**
-1. Sources environment variables from `.env`
-2. Creates resource group if it doesn't exist
-3. Deploys Bicep template (infrastructure)
-4. Packages and deploys function code
-5. Tests the deployed endpoint
-6. Displays configuration summary
-
-**Environment Variables Required:**
-- `RG` - Resource group name
-- `LOCATION` - Azure region
-- `ALERT_EMAIL` - Email for alerts
-- `PREFIX` - Resource name prefix (optional, defaults to "darylhome")
+1. Preserves the legacy Azure command
+2. Forwards all flags and exit codes to the unified deployment script
 
 ---
 
-### `deploy_aws.sh` (AWS)
+### `deploy_aws.sh` (AWS Wrapper)
 
-Deploys the ISP Monitor infrastructure to AWS using CDK.
+Compatibility wrapper that forwards to `deploy_cloud.sh --provider=aws`.
 
 **Usage:**
 ```bash
-./deploy_aws.sh
+./deploy_aws.sh [OPTIONS]
 ```
 
-**Prerequisites:**
-- AWS CLI installed and configured (`aws configure`)
-- Node.js and npm installed (for CDK)
-- Python 3.8+ installed
-- `.env` file configured with AWS variables
-
 **What it does:**
-1. Sources environment variables from `.env`
-2. Validates required variables
-3. Installs CDK dependencies
-4. Bootstraps CDK (first deployment only)
-5. Synthesizes CloudFormation template
-6. Deploys CDK stack
-7. Tests the Lambda function URL
-8. Displays configuration summary
-
-**Environment Variables Required:**
-- `AWS_REGION` - AWS region (e.g., us-east-1)
-- `ALERT_EMAIL` - Email for SNS notifications
-- `PREFIX` - Stack name prefix (optional, defaults to "isp-monitor")
-
-**Optional Variables:**
-- `LOG_RETENTION_DAYS` - CloudWatch log retention (default: 7)
-- `LAMBDA_MEMORY_MB` - Lambda memory allocation (default: 128)
+1. Preserves the legacy AWS command
+2. Forwards all flags and exit codes to the unified deployment script
 
 ---
 
@@ -185,35 +149,33 @@ Stops the heartbeat agent by killing the tmux session.
 
 ## Testing Scripts
 
-### `test_deploy.sh` (Azure)
+### `test_deploy.sh` (Azure Wrapper Smoke Test)
 
-Validates Azure deployment without actually deploying.
+Validates that the Azure compatibility wrapper forwards to the unified script.
 
 **Usage:**
 ```bash
-./test_deploy.sh
+./scripts/tests/test_deploy.sh
 ```
 
 **What it does:**
-- Validates Bicep template syntax
-- Checks for deployment errors
-- Performs dry-run validation
+- Runs `deploy.sh --check`
+- Verifies wrapper forwarding and exit behavior
 
 ---
 
-### `test_aws_deploy.sh` (AWS)
+### `test_aws_deploy.sh` (AWS Wrapper Smoke Test)
 
-Validates AWS CDK deployment without deploying.
+Validates that the AWS compatibility wrapper forwards to the unified script.
 
 **Usage:**
 ```bash
-./test_aws_deploy.sh
+./scripts/tests/test_aws_deploy.sh
 ```
 
 **What it does:**
-- Synthesizes CloudFormation template
-- Validates CDK stack configuration
-- Checks for errors and warnings
+- Runs `deploy_aws.sh --check`
+- Verifies wrapper forwarding and exit behavior
 
 ---
 
@@ -428,8 +390,8 @@ cp .env.example .env
 
 Deploy the infrastructure first:
 ```bash
-./deploy_aws.sh  # For AWS
-./deploy.sh      # For Azure
+./scripts/deploy/deploy_cloud.sh --provider=aws
+./scripts/deploy/deploy_cloud.sh --provider=azure
 ```
 
 ## Script Development

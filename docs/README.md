@@ -5,7 +5,7 @@ This folder contains all project documentation for the ISP Monitor system.
 ## Quick Links
 
 ### Getting Started
-- [Main README](../README.md) - Azure deployment guide
+- [Main README](../README.md) - Multi-cloud deployment guide
 - [AWS README](README_AWS.md) - AWS deployment guide
 - [Platform Comparison](PLATFORM_COMPARISON.md) - Azure vs AWS detailed comparison
 - [Migration Guide](MIGRATION_GUIDE.md) - How to migrate from Azure to AWS

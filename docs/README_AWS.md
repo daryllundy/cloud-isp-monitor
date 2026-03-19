@@ -65,10 +65,10 @@ cp .env.example .env
 # Edit .env with AWS-specific settings (AWS_REGION, ALERT_EMAIL, PREFIX)
 
 # Deploy to AWS
-./deploy_cloud.sh --cloud=aws
+./scripts/deploy/deploy_cloud.sh --provider=aws
 
 # Check prerequisites before deploying
-./deploy_cloud.sh --cloud=aws --check
+./scripts/deploy/deploy_cloud.sh --provider=aws --check
 ```
 
 See the main [README.md](README.md) for more details on the unified deployment approach.
@@ -92,7 +92,7 @@ Alternatively, use the AWS-specific deployment script directly:
 3.  **Run the Deployment Script**:
     The included script handles dependency installation and deployment.
     ```bash
-    ./deploy_aws.sh
+    ./scripts/deploy/deploy_aws.sh
     ```
 
 4.  **Note the Outputs**:

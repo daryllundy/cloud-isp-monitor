@@ -1,32 +1,13 @@
 #!/bin/bash
 set -e
 
-# Test the AWS deployment without actually deploying
-# 1. Check requirements
-# 2. Run CDK Synth
-# 3. Verify CloudFormation template valid
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+TEST_ALERT_EMAIL="${ALERT_EMAIL:-test@example.com}"
+TEST_AWS_REGION="${AWS_REGION:-us-west-1}"
 
-echo "Running AWS Deployment Test (Dry Run)..."
+echo "Running AWS wrapper smoke test..."
+AWS_REGION="$TEST_AWS_REGION" ALERT_EMAIL="$TEST_ALERT_EMAIL" \
+    "$REPO_ROOT/scripts/deploy/deploy_aws.sh" --check
 
-# Load env
-if [ -f .env ]; then
-  export $(grep -v '^#' .env | xargs)
-fi
-
-# Check vars
-if [ -z "$AWS_REGION" ]; then
-  echo "Error: AWS_REGION not set."
-  exit 1
-fi
-
-cd cdk
-if [ -d ".venv" ]; then
-    source .venv/bin/activate
-fi
-
-# Synth
-echo "Synthesizing CDK stack..."
-cdk synth --strict --quiet
-
-echo "CDK Synth successful. Template generated in cdk.out/"
-echo "Test Complete."
+echo "AWS wrapper smoke test passed."

@@ -77,27 +77,20 @@ nano .env
 
 ### 2️⃣ Deploy to Cloud
 
-**Option A: Unified Multi-Cloud Deployment** (Recommended)
+Use the unified local deployment entry point:
 
 ```bash
 # Deploy to Azure
-./scripts/deploy/deploy_cloud.sh --cloud=azure
+./scripts/deploy/deploy_cloud.sh --provider=azure
 
 # Or deploy to AWS
-./scripts/deploy/deploy_cloud.sh --cloud=aws
+./scripts/deploy/deploy_cloud.sh --provider=aws
 
 # Or deploy to BOTH!
-./scripts/deploy/deploy_cloud.sh --cloud=both
-```
+./scripts/deploy/deploy_cloud.sh --provider=both
 
-**Option B: Individual Cloud Scripts**
-
-```bash
-# Azure
-./scripts/deploy/deploy.sh
-
-# AWS
-./scripts/deploy/deploy_aws.sh
+# Check prerequisites without deploying
+./scripts/deploy/deploy_cloud.sh --provider=azure --check
 ```
 
 ### 3️⃣ Start Monitoring
@@ -251,9 +244,9 @@ Choose your weapon:
 │
 ├── 🚀 Deployment
 │   └── scripts/deploy/
-│       ├── deploy_cloud.sh         # Unified multi-cloud deployment
-│       ├── deploy.sh               # Azure deployment
-│       └── deploy_aws.sh           # AWS deployment
+│       ├── deploy_cloud.sh         # Canonical deployment entry point
+│       ├── deploy.sh               # Azure compatibility wrapper
+│       └── deploy_aws.sh           # AWS compatibility wrapper
 │
 ├── 🧪 Testing
 │   └── scripts/tests/              # Test scripts

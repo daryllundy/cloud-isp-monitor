@@ -131,3 +131,23 @@ verify_http_endpoint() {
     warning_msg "$label returned HTTP $http_code"
     return 1
 }
+
+validate_provider_env() {
+    local provider=$1
+
+    case "$provider" in
+        azure)
+            if ! missing=$(require_env_vars RG LOCATION ALERT_EMAIL); then
+                error_exit "Missing required Azure variables in .env:\n$missing"
+            fi
+            ;;
+        aws)
+            if ! missing=$(require_env_vars AWS_REGION ALERT_EMAIL); then
+                error_exit "Missing required AWS variables in .env:\n$missing"
+            fi
+            ;;
+        *)
+            error_exit "Unknown provider for env validation: $provider"
+            ;;
+    esac
+}

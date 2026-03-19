@@ -44,16 +44,16 @@ E2E_TEST_ENABLED=1 pytest tests/test_alarm.py::test_alarm_behavior -v -s
 Validate prerequisites:
 
 ```bash
-./scripts/deploy/deploy_cloud.sh --cloud=azure --check
-./scripts/deploy/deploy_cloud.sh --cloud=aws --check
+./scripts/deploy/deploy_cloud.sh --provider=azure --check
+./scripts/deploy/deploy_cloud.sh --provider=aws --check
 ```
 
 Deploy:
 
 ```bash
-./scripts/deploy/deploy_cloud.sh --cloud=azure
-./scripts/deploy/deploy_cloud.sh --cloud=aws
-./scripts/deploy/deploy_cloud.sh --cloud=both
+./scripts/deploy/deploy_cloud.sh --provider=azure
+./scripts/deploy/deploy_cloud.sh --provider=aws
+./scripts/deploy/deploy_cloud.sh --provider=both
 ```
 
 ## Heartbeat Agent
